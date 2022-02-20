@@ -48,22 +48,19 @@ self.addEventListener('install', function (e) {
 self.addEventListener('activate', function(e) {
     e.waitUntil(
         caches.keys().then(function(keyList) {
-        // `keyList` contains all cache names under your username.github.io
-        // filter out ones that has this app prefix to create keeplist
-        let cacheKeeplist = keyList.filter(function(key) {
+            let cacheKeeplist = keyList.filter(function(key) {
             return key.indexOf(APP_PREFIX);
-        });
-        // add current cache name to keeplist
-        cacheKeeplist.push(CACHE_NAME);
-
-        return Promise.all(
+            });
+            cacheKeeplist.push(CACHE_NAME);
+    
+            return Promise.all(
             keyList.map(function(key, i) {
-            if (cacheKeeplist.indexOf(key) === -1) {
+                if (cacheKeeplist.indexOf(key) === -1) {
                 console.log('deleting cache : ' + keyList[i]);
                 return caches.delete(keyList[i]);
-            }
+                }
             })
-        );
+            );
         })
     );
 });
